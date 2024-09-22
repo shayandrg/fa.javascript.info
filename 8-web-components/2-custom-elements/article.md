@@ -20,38 +20,48 @@
 
 این کار با ساخت یک کلاس با متدهای خاص انجام می‌شه. این کار ساده است چون فقط چند متد وجود داره و همه اون‌ها اختیاری هستن.
 
+Here's a sketch with the full list:
+
+```js
 class MyElement extends HTMLElement {
   constructor() {
     super();
-    // element ایجاد شده
+    // element created
   }
 
   connectedCallback() {
-    // مرورگر این متد را زمانی که element به سند اضافه می‌شود صدا می‌زند
-    // (می‌تواند بارها صدا زده شود اگر یک element به‌طور مکرر اضافه یا حذف شود)
+    // browser calls this method when the element is added to the document
+    // (can be called many times if an element is repeatedly added/removed)
   }
 
   disconnectedCallback() {
-    // مرورگر این متد را زمانی که element از سند حذف می‌شود صدا می‌زند
-    // (می‌تواند بارها صدا زده شود اگر یک element به‌طور مکرر اضافه یا حذف شود)
+    // browser calls this method when the element is removed from the document
+    // (can be called many times if an element is repeatedly added/removed)
   }
 
   static get observedAttributes() {
-    return [/* آرایه‌ای از نام attributeهایی که برای تغییرات نظارت می‌شوند */];
+    return [/* array of attribute names to monitor for changes */];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // زمانی که یکی از attributeهای لیست بالا تغییر کند صدا زده می‌شود
+    // called when one of attributes listed above is modified
   }
 
   adoptedCallback() {
-    // زمانی که element به یک سند جدید منتقل می‌شود صدا زده می‌شود
-    // (این اتفاق در document.adoptNode رخ می‌دهد، خیلی کم استفاده می‌شود)
+    // called when the element is moved to a new document
+    // (happens in document.adoptNode, very rarely used)
   }
 
-  // متدها و propertyهای دیگری هم می‌تواند وجود داشته باشد
+  // there can be other element methods and properties
 }
+```
 
+After that, we need to register the element:
+
+```js
+// let the browser know that <my-element> is served by our new class
+customElements.define("my-element", MyElement);
+```
 
 Now for any HTML elements with tag `<my-element>`, an instance of `MyElement` is created, and the aforementioned methods are called. We also can `document.createElement('my-element')` in JavaScript.
 
