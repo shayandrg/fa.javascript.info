@@ -1,67 +1,57 @@
 
-# عناصر سفارشی
+# المان‌های سفارشی
 
-با استفاده از یک کلاس خاص که دارای متدها و ویژگی‌های خود، رویدادها و غیره است، می‌توانیم عناصر HTML سفارشی ایجاد کنیم.
+ما می‌تونیم المان‌های سفارشی HTML بسازیم که با کلاس خودمون تعریف شدن و متدها، ویژگی‌ها و رویدادهای خودشون رو دارن.
 
-Once a custom element is defined, we can use it on par with built-in HTML elements.
+وقتی یک المان سفارشی تعریف بشه، می‌تونیم مثل المان‌های معمولی HTML ازش استفاده کنیم.
 
-That's great, as HTML dictionary is rich, but not infinite. There are no `<easy-tabs>`, `<sliding-carousel>`, `<beautiful-upload>`... Just think of any other tag we might need.
+این خیلی خوبه، چون HTML تنوع زیادی داره ولی همه چیز رو پوشش نمی‌ده. مثلاً المان‌هایی مثل `<easy-tabs>`، `<sliding-carousel>`، `<beautiful-upload>` وجود ندارن... فقط تصور کن چه تگ‌هایی ممکنه نیاز داشته باشیم.
 
-We can define them with a special class, and then use as if they were always a part of HTML.
+ما می‌تونیم این المان‌ها رو با یه کلاس خاص بسازیم و بعد ازشون مثل اینکه همیشه جزئی از HTML بودن استفاده کنیم.
 
-There are two kinds of custom elements:
+دو نوع المان سفارشی داریم:
 
-1. **Autonomous custom elements** -- "all-new" elements, extending the abstract `HTMLElement` class.
-2. **Customized built-in elements** -- extending built-in elements, like a customized button, based on `HTMLButtonElement` etc.
+1. **المان‌های سفارشی مستقل** -- المان‌های کاملاً جدیدی که از کلاس `HTMLElement` ساخته می‌شن.
+2. **المان‌های داخلی سفارشی‌شده** -- المان‌هایی که از المان‌های داخلی مثل دکمه (`HTMLButtonElement`) توسعه پیدا می‌کنن و سفارشی می‌شن.
 
-First we'll cover autonomous elements, and then move to customized built-in ones.
+ابتدا المان‌های مستقل رو توضیح می‌دیم و بعد به سراغ المان‌های داخلی سفارشی‌شده می‌ریم.
 
-To create a custom element, we need to tell the browser several details about it: how to show it, what to do when the element is added or removed to page, etc.
+برای ساخت یک المان سفارشی، باید به مرورگر چند جزئیات بگیم: چطور نمایش داده بشه، چه اتفاقی بیفته وقتی المان به صفحه اضافه یا از اون حذف می‌شه و مواردی از این دست.
 
-That's done by making a class with special methods. That's easy, as there are only few methods, and all of them are optional.
+این کار با ساخت یک کلاس با متدهای خاص انجام می‌شه. این کار ساده است چون فقط چند متد وجود داره و همه اون‌ها اختیاری هستن.
 
-Here's a sketch with the full list:
-
-```js
 class MyElement extends HTMLElement {
   constructor() {
     super();
-    // element created
+    // element ایجاد شده
   }
 
   connectedCallback() {
-    // browser calls this method when the element is added to the document
-    // (can be called many times if an element is repeatedly added/removed)
+    // مرورگر این متد را زمانی که element به سند اضافه می‌شود صدا می‌زند
+    // (می‌تواند بارها صدا زده شود اگر یک element به‌طور مکرر اضافه یا حذف شود)
   }
 
   disconnectedCallback() {
-    // browser calls this method when the element is removed from the document
-    // (can be called many times if an element is repeatedly added/removed)
+    // مرورگر این متد را زمانی که element از سند حذف می‌شود صدا می‌زند
+    // (می‌تواند بارها صدا زده شود اگر یک element به‌طور مکرر اضافه یا حذف شود)
   }
 
   static get observedAttributes() {
-    return [/* array of attribute names to monitor for changes */];
+    return [/* آرایه‌ای از نام attributeهایی که برای تغییرات نظارت می‌شوند */];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // called when one of attributes listed above is modified
+    // زمانی که یکی از attributeهای لیست بالا تغییر کند صدا زده می‌شود
   }
 
   adoptedCallback() {
-    // called when the element is moved to a new document
-    // (happens in document.adoptNode, very rarely used)
+    // زمانی که element به یک سند جدید منتقل می‌شود صدا زده می‌شود
+    // (این اتفاق در document.adoptNode رخ می‌دهد، خیلی کم استفاده می‌شود)
   }
 
-  // there can be other element methods and properties
+  // متدها و propertyهای دیگری هم می‌تواند وجود داشته باشد
 }
-```
 
-After that, we need to register the element:
-
-```js
-// let the browser know that <my-element> is served by our new class
-customElements.define("my-element", MyElement);
-```
 
 Now for any HTML elements with tag `<my-element>`, an instance of `MyElement` is created, and the aforementioned methods are called. We also can `document.createElement('my-element')` in JavaScript.
 
